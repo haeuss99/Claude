@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+<title>Muskelschmerz-Tracking</title>
+<meta name="description" content="Tägliches Tracking von Muskelschmerzen nach Körperstelle" />
+<meta name="theme-color" content="#0d5c5c" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Schmerz-Tracker" />
+<link rel="manifest" href="manifest.json" />
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+<link rel="icon" href="icons/favicon-32.png" sizes="32x32" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header class="topbar">
+  <h1>Muskelschmerz-Tracking</h1>
+  <div class="today" id="todayLabel"></div>
+</header>
+
+<main>
+  <section class="card" aria-labelledby="mapHeading">
+    <h2 id="mapHeading">Wo tut es weh?</h2>
+    <p class="hint">Tippe auf eine Körperstelle. Mehrfachauswahl möglich. Ansicht wie im Spiegel (deine linke Seite = Bildschirm links).</p>
+
+    <div class="view-tabs" role="tablist" aria-label="Körperansicht">
+      <button type="button" class="view-tab active" data-view="front" role="tab" aria-selected="true">Vorne</button>
+      <button type="button" class="view-tab" data-view="back" role="tab" aria-selected="false">Hinten</button>
+    </div>
+
+    <div class="bodymap-wrap">
+      <svg id="svg-front" class="bodymap" viewBox="0 0 300 440" role="group" aria-label="Körper von vorne" data-view-panel="front">
+        <ellipse cx="150" cy="40" r="28" ry="30" class="deco" />
+        <rect x="108" y="92" width="84" height="64" rx="16" class="region" data-region="chest" data-label="Brust" />
+        <rect x="134" y="66" width="32" height="22" rx="10" class="region" data-region="neck" data-label="Nacken" />
+        <ellipse cx="90" cy="100" rx="28" ry="22" class="region" data-region="shoulder-left" data-label="Schulter links" />
+        <ellipse cx="210" cy="100" rx="28" ry="22" class="region" data-region="shoulder-right" data-label="Schulter rechts" />
+        <rect x="58" y="96" width="28" height="86" rx="14" class="region" data-region="upper-arm-left" data-label="Oberarm links" />
+        <rect x="214" y="96" width="28" height="86" rx="14" class="region" data-region="upper-arm-right" data-label="Oberarm rechts" />
+        <rect x="114" y="156" width="72" height="60" rx="14" class="region" data-region="abs" data-label="Bauch" />
+        <rect x="52" y="182" width="26" height="78" rx="13" class="region" data-region="forearm-left" data-label="Unterarm links" />
+        <rect x="222" y="182" width="26" height="78" rx="13" class="region" data-region="forearm-right" data-label="Unterarm rechts" />
+        <rect x="112" y="216" width="38" height="108" rx="18" class="region" data-region="thigh-left-front" data-label="Oberschenkel links (vorne)" />
+        <rect x="150" y="216" width="38" height="108" rx="18" class="region" data-region="thigh-right-front" data-label="Oberschenkel rechts (vorne)" />
+        <rect x="114" y="324" width="32" height="96" rx="15" class="region" data-region="calf-left-front" data-label="Schienbein links" />
+        <rect x="154" y="324" width="32" height="96" rx="15" class="region" data-region="calf-right-front" data-label="Schienbein rechts" />
+      </svg>
+
+      <svg id="svg-back" class="bodymap is-hidden" viewBox="0 0 300 440" role="group" aria-label="Körper von hinten" data-view-panel="back">
+        <ellipse cx="150" cy="40" r="28" ry="30" class="deco" />
+        <rect x="108" y="92" width="84" height="58" rx="16" class="region" data-region="upper-back" data-label="Oberer Rücken" />
+        <rect x="134" y="66" width="32" height="22" rx="10" class="region" data-region="neck" data-label="Nacken" />
+        <ellipse cx="90" cy="100" rx="28" ry="22" class="region" data-region="shoulder-left" data-label="Schulter links" />
+        <ellipse cx="210" cy="100" rx="28" ry="22" class="region" data-region="shoulder-right" data-label="Schulter rechts" />
+        <rect x="58" y="96" width="28" height="86" rx="14" class="region" data-region="upper-arm-left" data-label="Oberarm links" />
+        <rect x="214" y="96" width="28" height="86" rx="14" class="region" data-region="upper-arm-right" data-label="Oberarm rechts" />
+        <rect x="114" y="150" width="72" height="50" rx="14" class="region" data-region="lower-back" data-label="Unterer Rücken" />
+        <rect x="52" y="182" width="26" height="78" rx="13" class="region" data-region="forearm-left" data-label="Unterarm links" />
+        <rect x="222" y="182" width="26" height="78" rx="13" class="region" data-region="forearm-right" data-label="Unterarm rechts" />
+        <rect x="110" y="200" width="80" height="46" rx="16" class="region" data-region="glutes" data-label="Gesäß" />
+        <rect x="112" y="246" width="38" height="100" rx="18" class="region" data-region="thigh-left-back" data-label="Oberschenkel links (hinten)" />
+        <rect x="150" y="246" width="38" height="100" rx="18" class="region" data-region="thigh-right-back" data-label="Oberschenkel rechts (hinten)" />
+        <rect x="114" y="346" width="32" height="94" rx="15" class="region" data-region="calf-left-back" data-label="Wade links" />
+        <rect x="154" y="346" width="32" height="94" rx="15" class="region" data-region="calf-right-back" data-label="Wade rechts" />
+      </svg>
+
+      <div id="tapToast" class="tap-toast" aria-live="polite"></div>
+    </div>
+
+    <div id="selectedList" class="selected-list" aria-live="polite">
+      <p class="empty-hint">Noch keine Stelle ausgewählt.</p>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Ernährung heute</h2>
+    <label class="switch-row">
+      <span>Fleisch gegessen?</span>
+      <input type="checkbox" id="meatToggle" />
+      <span class="switch"></span>
+    </label>
+    <label class="note-label" for="dietNote">Sonstige Notiz (optional)</label>
+    <textarea id="dietNote" rows="2" placeholder="z.B. Alkohol, bestimmte Lebensmittel, besonders viel Sport..."></textarea>
+  </section>
+
+  <button type="button" id="saveBtn" class="primary-btn">Eintrag speichern</button>
+  <p id="saveStatus" class="save-status" aria-live="polite"></p>
+
+  <section class="card">
+    <div class="history-header">
+      <h2>Bisherige Einträge</h2>
+      <button type="button" id="exportBtn" class="secondary-btn">CSV exportieren</button>
+    </div>
+    <div id="historyList" class="history-list">
+      <p class="empty-hint">Noch keine Einträge vorhanden.</p>
+    </div>
+  </section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
