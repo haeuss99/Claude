@@ -68,7 +68,6 @@
 
   // ---- state ----
   const selectedRegions = new Map(); // id -> { id, label, intensity }
-  let currentView = "front";
 
   const todayLabel = document.getElementById("todayLabel");
   const selectedListEl = document.getElementById("selectedList");
@@ -81,19 +80,6 @@
   const exportBtn = document.getElementById("exportBtn");
 
   todayLabel.textContent = formatDateDisplay(todayIso());
-
-  // ---- view tabs ----
-  document.querySelectorAll(".view-tab").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      currentView = btn.dataset.view;
-      document.querySelectorAll(".view-tab").forEach((b) => {
-        b.classList.toggle("active", b === btn);
-        b.setAttribute("aria-selected", b === btn ? "true" : "false");
-      });
-      document.getElementById("svg-front").classList.toggle("is-hidden", currentView !== "front");
-      document.getElementById("svg-back").classList.toggle("is-hidden", currentView !== "back");
-    });
-  });
 
   // ---- region tap handling ----
   function refreshRegionHighlights() {

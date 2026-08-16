@@ -84,29 +84,6 @@ main {
   color: var(--text-muted);
 }
 
-.view-tabs {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-
-.view-tab {
-  flex: 1;
-  padding: 8px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--text);
-  font-size: 0.9rem;
-  font-weight: 600;
-}
-
-.view-tab.active {
-  background: var(--teal);
-  border-color: var(--teal);
-  color: white;
-}
-
 .bodymap-wrap {
   position: relative;
   display: flex;
@@ -117,10 +94,6 @@ main {
   width: 100%;
   max-width: 260px;
   touch-action: manipulation;
-}
-
-.bodymap.is-hidden {
-  display: none;
 }
 
 .bodymap .deco {
