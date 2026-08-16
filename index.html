@@ -31,7 +31,7 @@
     </div>
 
     <div class="bodymap-wrap">
-      <svg id="svg-front" class="bodymap" viewBox="0 0 300 440" role="group" aria-label="Körper von vorne" data-view-panel="front">
+      <svg id="svg-front" class="bodymap" viewBox="0 0 300 480" role="group" aria-label="Körper von vorne" data-view-panel="front">
         <ellipse cx="150" cy="40" r="28" ry="30" class="deco" />
         <rect x="108" y="92" width="84" height="64" rx="16" class="region" data-region="chest" data-label="Brust" />
         <rect x="134" y="66" width="32" height="22" rx="10" class="region" data-region="neck" data-label="Nacken" />
@@ -42,13 +42,21 @@
         <rect x="114" y="156" width="72" height="60" rx="14" class="region" data-region="abs" data-label="Bauch" />
         <rect x="52" y="182" width="26" height="78" rx="13" class="region" data-region="forearm-left" data-label="Unterarm links" />
         <rect x="222" y="182" width="26" height="78" rx="13" class="region" data-region="forearm-right" data-label="Unterarm rechts" />
+        <circle cx="68.5" cy="182" r="16" class="region joint" data-region="elbow-left" data-label="Ellenbogen links" />
+        <circle cx="231.5" cy="182" r="16" class="region joint" data-region="elbow-right" data-label="Ellenbogen rechts" />
+        <circle cx="65" cy="272" r="18" class="region joint" data-region="wrist-left" data-label="Handgelenk links" />
+        <circle cx="235" cy="272" r="18" class="region joint" data-region="wrist-right" data-label="Handgelenk rechts" />
         <rect x="112" y="216" width="38" height="108" rx="18" class="region" data-region="thigh-left-front" data-label="Oberschenkel links (vorne)" />
         <rect x="150" y="216" width="38" height="108" rx="18" class="region" data-region="thigh-right-front" data-label="Oberschenkel rechts (vorne)" />
         <rect x="114" y="324" width="32" height="96" rx="15" class="region" data-region="calf-left-front" data-label="Schienbein links" />
         <rect x="154" y="324" width="32" height="96" rx="15" class="region" data-region="calf-right-front" data-label="Schienbein rechts" />
+        <circle cx="131" cy="324" r="18" class="region joint" data-region="knee-left" data-label="Knie links" />
+        <circle cx="169" cy="324" r="18" class="region joint" data-region="knee-right" data-label="Knie rechts" />
+        <circle cx="130" cy="430" r="16" class="region joint" data-region="ankle-left" data-label="Sprunggelenk links" />
+        <circle cx="170" cy="430" r="16" class="region joint" data-region="ankle-right" data-label="Sprunggelenk rechts" />
       </svg>
 
-      <svg id="svg-back" class="bodymap is-hidden" viewBox="0 0 300 440" role="group" aria-label="Körper von hinten" data-view-panel="back">
+      <svg id="svg-back" class="bodymap is-hidden" viewBox="0 0 300 480" role="group" aria-label="Körper von hinten" data-view-panel="back">
         <ellipse cx="150" cy="40" r="28" ry="30" class="deco" />
         <rect x="108" y="92" width="84" height="58" rx="16" class="region" data-region="upper-back" data-label="Oberer Rücken" />
         <rect x="134" y="66" width="32" height="22" rx="10" class="region" data-region="neck" data-label="Nacken" />
@@ -59,11 +67,19 @@
         <rect x="114" y="150" width="72" height="50" rx="14" class="region" data-region="lower-back" data-label="Unterer Rücken" />
         <rect x="52" y="182" width="26" height="78" rx="13" class="region" data-region="forearm-left" data-label="Unterarm links" />
         <rect x="222" y="182" width="26" height="78" rx="13" class="region" data-region="forearm-right" data-label="Unterarm rechts" />
+        <circle cx="68.5" cy="182" r="16" class="region joint" data-region="elbow-left" data-label="Ellenbogen links" />
+        <circle cx="231.5" cy="182" r="16" class="region joint" data-region="elbow-right" data-label="Ellenbogen rechts" />
+        <circle cx="65" cy="272" r="18" class="region joint" data-region="wrist-left" data-label="Handgelenk links" />
+        <circle cx="235" cy="272" r="18" class="region joint" data-region="wrist-right" data-label="Handgelenk rechts" />
         <rect x="110" y="200" width="80" height="46" rx="16" class="region" data-region="glutes" data-label="Gesäß" />
         <rect x="112" y="246" width="38" height="100" rx="18" class="region" data-region="thigh-left-back" data-label="Oberschenkel links (hinten)" />
         <rect x="150" y="246" width="38" height="100" rx="18" class="region" data-region="thigh-right-back" data-label="Oberschenkel rechts (hinten)" />
         <rect x="114" y="346" width="32" height="94" rx="15" class="region" data-region="calf-left-back" data-label="Wade links" />
         <rect x="154" y="346" width="32" height="94" rx="15" class="region" data-region="calf-right-back" data-label="Wade rechts" />
+        <circle cx="131" cy="346" r="18" class="region joint" data-region="knee-left" data-label="Knie links" />
+        <circle cx="169" cy="346" r="18" class="region joint" data-region="knee-right" data-label="Knie rechts" />
+        <circle cx="130" cy="450" r="16" class="region joint" data-region="ankle-left" data-label="Sprunggelenk links" />
+        <circle cx="170" cy="450" r="16" class="region joint" data-region="ankle-right" data-label="Sprunggelenk rechts" />
       </svg>
 
       <div id="tapToast" class="tap-toast" aria-live="polite"></div>

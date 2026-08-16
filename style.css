@@ -147,6 +147,21 @@ main {
   fill: var(--accent);
 }
 
+.bodymap .region.joint {
+  fill: #b7cfcb;
+  stroke: var(--teal);
+  stroke-width: 1.5;
+}
+
+@media (prefers-color-scheme: dark) {
+  .bodymap .region.joint { fill: #2f5652; }
+}
+
+.bodymap .region.joint.selected {
+  fill: var(--accent);
+  stroke: var(--accent);
+}
+
 .tap-toast {
   position: absolute;
   top: 4px;
