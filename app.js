@@ -55,6 +55,53 @@
     });
   }
 
+  // ---- localStorage backup mirror ----
+  // iOS Safari's IndexedDB has occasionally been reported to lose data even
+  // for installed home-screen apps. localStorage is a separate storage
+  // engine, so mirroring entries there gives a second, independent copy to
+  // recover from if IndexedDB alone loses records.
+  const BACKUP_KEY = "pain-tracker-backup-v1";
+
+  function readBackup() {
+    try {
+      return JSON.parse(localStorage.getItem(BACKUP_KEY) || "{}");
+    } catch {
+      return {};
+    }
+  }
+
+  function writeBackupEntry(entry) {
+    try {
+      const backup = readBackup();
+      backup[entry.date] = entry;
+      localStorage.setItem(BACKUP_KEY, JSON.stringify(backup));
+    } catch {}
+  }
+
+  function removeBackupEntry(date) {
+    try {
+      const backup = readBackup();
+      delete backup[date];
+      localStorage.setItem(BACKUP_KEY, JSON.stringify(backup));
+    } catch {}
+  }
+
+  async function reconcileBackup() {
+    const backup = readBackup();
+    const dbEntries = await getAllEntries();
+    const dbByDate = new Map(dbEntries.map((e) => [e.date, e]));
+    let restored = 0;
+    for (const date of Object.keys(backup)) {
+      if (!dbByDate.has(date)) {
+        await putEntry(backup[date]);
+        dbByDate.set(date, backup[date]);
+        restored++;
+      }
+    }
+    for (const entry of dbByDate.values()) writeBackupEntry(entry);
+    return restored;
+  }
+
   function todayIso() {
     const d = new Date();
     const tz = d.getTimezoneOffset() * 60000;
@@ -168,6 +215,7 @@
       updatedAt: Date.now(),
     };
     await putEntry(entry);
+    writeBackupEntry(entry);
     saveStatus.textContent = "Gespeichert ✓";
     setTimeout(() => (saveStatus.textContent = ""), 2500);
     await renderHistory();
@@ -210,6 +258,7 @@
         e.stopPropagation();
         if (confirm(`Eintrag vom ${formatDateDisplay(entry.date)} wirklich löschen?`)) {
           await deleteEntry(entry.date);
+          removeBackupEntry(entry.date);
           if (entry.date === todayIso()) await loadTodayIntoForm();
           await renderHistory();
         }
@@ -282,7 +331,13 @@
   // ---- init ----
   (async function init() {
     db = await openDb();
+    const restored = await reconcileBackup();
     await loadTodayIntoForm();
     await renderHistory();
+    if (restored > 0) {
+      const label = restored === 1 ? "Eintrag" : "Einträge";
+      saveStatus.textContent = `${restored} ${label} aus Backup wiederhergestellt ✓`;
+      setTimeout(() => (saveStatus.textContent = ""), 5000);
+    }
   })();
 })();
