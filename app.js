@@ -121,6 +121,8 @@
   const tapToast = document.getElementById("tapToast");
   const meatToggle = document.getElementById("meatToggle");
   const dietNote = document.getElementById("dietNote");
+  const medicationNote = document.getElementById("medicationNote");
+  const otherNote = document.getElementById("otherNote");
   const saveBtn = document.getElementById("saveBtn");
   const saveStatus = document.getElementById("saveStatus");
   const historyList = document.getElementById("historyList");
@@ -198,9 +200,13 @@
       for (const r of entry.regions) selectedRegions.set(r.id, { ...r });
       meatToggle.checked = !!entry.meat;
       dietNote.value = entry.dietNote || "";
+      medicationNote.value = entry.medication || "";
+      otherNote.value = entry.otherNote || "";
     } else {
       meatToggle.checked = false;
       dietNote.value = "";
+      medicationNote.value = "";
+      otherNote.value = "";
     }
     refreshRegionHighlights();
     renderSelectedList();
@@ -212,6 +218,8 @@
       regions: Array.from(selectedRegions.values()),
       meat: meatToggle.checked,
       dietNote: dietNote.value.trim(),
+      medication: medicationNote.value.trim(),
+      otherNote: otherNote.value.trim(),
       updatedAt: Date.now(),
     };
     await putEntry(entry);
@@ -247,7 +255,9 @@
         </div>
         <div class="history-detail">
           ${entry.regions.length ? `<ul>${regionListHtml}</ul>` : "<p>Keine Körperstellen erfasst.</p>"}
-          ${entry.dietNote ? `<p>Notiz: ${entry.dietNote}</p>` : ""}
+          ${entry.dietNote ? `<p>Ernährung: ${entry.dietNote}</p>` : ""}
+          ${entry.medication ? `<p>Medikamente: ${entry.medication}</p>` : ""}
+          ${entry.otherNote ? `<p>Sonstiges: ${entry.otherNote}</p>` : ""}
           <button type="button" class="history-delete">Eintrag löschen</button>
         </div>
       `;
@@ -270,16 +280,18 @@
   // ---- CSV export ----
   function buildCsv(entries) {
     entries.sort((a, b) => (a.date < b.date ? -1 : 1));
-    const header = ["Datum", "Koerperstelle", "Intensitaet_0_10", "Fleisch", "ErnaehrungsNotiz"];
+    const header = ["Datum", "Koerperstelle", "Intensitaet_0_10", "Fleisch", "ErnaehrungsNotiz", "Medikamente", "Sonstiges"];
     const rows = [header];
     for (const entry of entries) {
       const meat = entry.meat ? "ja" : "nein";
       const note = (entry.dietNote || "").replace(/[\r\n;]+/g, " ");
+      const medication = (entry.medication || "").replace(/[\r\n;]+/g, " ");
+      const otherNote = (entry.otherNote || "").replace(/[\r\n;]+/g, " ");
       if (entry.regions.length === 0) {
-        rows.push([entry.date, "", "", meat, note]);
+        rows.push([entry.date, "", "", meat, note, medication, otherNote]);
       } else {
         for (const r of entry.regions) {
-          rows.push([entry.date, r.label, String(r.intensity), meat, note]);
+          rows.push([entry.date, r.label, String(r.intensity), meat, note, medication, otherNote]);
         }
       }
     }
