@@ -115,8 +115,11 @@
 
   // ---- state ----
   const selectedRegions = new Map(); // id -> { id, label, intensity }
+  let currentEntryDate = todayIso();
 
   const todayLabel = document.getElementById("todayLabel");
+  const entryDateInput = document.getElementById("entryDate");
+  const todayBtn = document.getElementById("todayBtn");
   const selectedListEl = document.getElementById("selectedList");
   const tapToast = document.getElementById("tapToast");
   const meatToggle = document.getElementById("meatToggle");
@@ -129,6 +132,19 @@
   const exportBtn = document.getElementById("exportBtn");
 
   todayLabel.textContent = formatDateDisplay(todayIso());
+  entryDateInput.value = currentEntryDate;
+  entryDateInput.max = todayIso();
+
+  entryDateInput.addEventListener("change", async () => {
+    currentEntryDate = entryDateInput.value || todayIso();
+    await loadEntryIntoForm(currentEntryDate);
+  });
+
+  todayBtn.addEventListener("click", async () => {
+    currentEntryDate = todayIso();
+    entryDateInput.value = currentEntryDate;
+    await loadEntryIntoForm(currentEntryDate);
+  });
 
   // ---- region tap handling ----
   function refreshRegionHighlights() {
@@ -193,8 +209,8 @@
   }
 
   // ---- save ----
-  async function loadTodayIntoForm() {
-    const entry = await getEntry(todayIso());
+  async function loadEntryIntoForm(date) {
+    const entry = await getEntry(date);
     selectedRegions.clear();
     if (entry) {
       for (const r of entry.regions) selectedRegions.set(r.id, { ...r });
@@ -214,7 +230,7 @@
 
   saveBtn.addEventListener("click", async () => {
     const entry = {
-      date: todayIso(),
+      date: currentEntryDate,
       regions: Array.from(selectedRegions.values()),
       meat: meatToggle.checked,
       dietNote: dietNote.value.trim(),
@@ -258,18 +274,26 @@
           ${entry.dietNote ? `<p>Ernährung: ${entry.dietNote}</p>` : ""}
           ${entry.medication ? `<p>Medikamente: ${entry.medication}</p>` : ""}
           ${entry.otherNote ? `<p>Sonstiges: ${entry.otherNote}</p>` : ""}
+          <button type="button" class="history-edit">Diesen Tag bearbeiten</button>
           <button type="button" class="history-delete">Eintrag löschen</button>
         </div>
       `;
       item.querySelector(".history-item-head").addEventListener("click", () => {
         item.classList.toggle("open");
       });
+      item.querySelector(".history-edit").addEventListener("click", async (e) => {
+        e.stopPropagation();
+        currentEntryDate = entry.date;
+        entryDateInput.value = entry.date;
+        await loadEntryIntoForm(entry.date);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
       item.querySelector(".history-delete").addEventListener("click", async (e) => {
         e.stopPropagation();
         if (confirm(`Eintrag vom ${formatDateDisplay(entry.date)} wirklich löschen?`)) {
           await deleteEntry(entry.date);
           removeBackupEntry(entry.date);
-          if (entry.date === todayIso()) await loadTodayIntoForm();
+          if (entry.date === currentEntryDate) await loadEntryIntoForm(currentEntryDate);
           await renderHistory();
         }
       });
@@ -344,7 +368,7 @@
   (async function init() {
     db = await openDb();
     const restored = await reconcileBackup();
-    await loadTodayIntoForm();
+    await loadEntryIntoForm(currentEntryDate);
     await renderHistory();
     if (restored > 0) {
       const label = restored === 1 ? "Eintrag" : "Einträge";
