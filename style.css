@@ -196,29 +196,77 @@ main {
 
 .region-row {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: 10px;
   background: var(--bg);
   border-radius: 12px;
-  padding: 10px 12px;
+  padding: 12px 14px;
+}
+
+.region-row-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .region-row .region-name {
-  flex: 0 0 auto;
-  font-size: 0.85rem;
+  flex: 1;
+  font-size: 0.9rem;
   font-weight: 600;
-  width: 108px;
 }
 
 .region-row input[type="range"] {
-  flex: 1;
-  accent-color: var(--accent);
+  width: 100%;
+  height: 36px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  outline: none;
+  margin: 4px 0;
+  touch-action: pan-x;
+}
+
+.region-row input[type="range"]::-webkit-slider-runnable-track {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--border);
+}
+
+.region-row input[type="range"]::-moz-range-track {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--border);
+}
+
+.region-row input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 30px;
+  height: 30px;
+  margin-top: -11px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 3px solid var(--surface);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+.region-row input[type="range"]::-moz-range-thumb {
+  width: 30px;
+  height: 30px;
+  border: 3px solid var(--surface);
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
 }
 
 .region-row .intensity-val {
-  width: 22px;
+  width: 26px;
   text-align: right;
   font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--accent);
   font-variant-numeric: tabular-nums;
 }
 
@@ -226,9 +274,10 @@ main {
   border: none;
   background: transparent;
   color: var(--text-muted);
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   line-height: 1;
-  padding: 4px;
+  padding: 6px 4px;
+  margin: -6px -4px;
 }
 
 .switch-row {

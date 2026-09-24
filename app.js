@@ -190,10 +190,12 @@
       const row = document.createElement("div");
       row.className = "region-row";
       row.innerHTML = `
-        <span class="region-name">${region.label}</span>
+        <div class="region-row-head">
+          <span class="region-name">${region.label}</span>
+          <span class="intensity-val">${region.intensity}</span>
+          <button type="button" class="remove-btn" aria-label="Entfernen">✕</button>
+        </div>
         <input type="range" min="0" max="10" step="1" value="${region.intensity}" aria-label="Intensität ${region.label}" />
-        <span class="intensity-val">${region.intensity}</span>
-        <button type="button" class="remove-btn" aria-label="Entfernen">✕</button>
       `;
       const range = row.querySelector("input[type=range]");
       const val = row.querySelector(".intensity-val");
